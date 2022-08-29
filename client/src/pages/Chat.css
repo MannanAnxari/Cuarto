@@ -1,0 +1,13 @@
+.container-main {
+    background-color: rgba(223, 223, 223, 0);
+}
+
+.chat-box {
+    background-color: #333232;
+    border-left: 1px dashed #ffffff57;
+    height: 90vh;
+}
+
+@media (max-width: 768px) {
+   
+}
