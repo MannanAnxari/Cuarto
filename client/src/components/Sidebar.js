@@ -21,8 +21,18 @@ function Sidebar(props) {
     const [activePhoneChatBox, setactivePhoneChatBox] = useState(false);
     const [sendScreenStatus, setsendScreenStatus] = useState(false);
     const [typingUserId, settypingUserId] = useState(null);
+    const [memberbtn, setmember] = useState(true);
+    const [groupbtn, setGroup] = useState(false);
+    const [profilebtn, setProfile] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [ppass, setPpass] = useState("*******");
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [isTyping, setisTyping] = useState(false);
 
     let userId = user._id;
+    var id = user._id;
 
     const enableEdit = () => {
         setActiveEdit(!isActiveEdit);
@@ -41,37 +51,7 @@ function Sidebar(props) {
         // redirect to home page
         window.location.replace("/");
     }
-    var id = user._id 
     function joinRoom(room, isPublic = true, id) {
-        // settoggleChat(true);
-        // var kodrz_Key = "code";
-        // if (!user) {
-        //     return alert("Please Login or Signup...!");
-        // }
-
-        // console.log(rooms);
-
-        // else if (room === "KODRZ") {
-        //     // setCurrentRoom(rooms[1]); 
-        //     swal("Please Enter a Secret Key:", {
-        //         content: "input",
-        //     }).then((value) => {
-        //         if (value === kodrz_Key) { 
-        //             setkodrz(true);
-        //             console.log("KODRZ True");
-        //         }
-        //         else {
-        //             swal(`Your Key is Incorrect!`);
-        //             setkodrz(false);
-        //             console.log("KODRZ False");
-        //         }
-        //     });
-        //     if (kodrz === true) {
-        //         setCurrentRoom(rooms[0]);
-        //     }
-        // }
-        // else {
-        // } 
         socket.emit("join-room", room, currentRoom, id);
         setCurrentRoom(room);
         setactivePhoneChatBox(true)
@@ -82,7 +62,6 @@ function Sidebar(props) {
 
     }
 
-    const [isTyping, setisTyping] = useState(false);
 
     const changeActive = () => {
         setactivePhoneChatBox(false)
@@ -91,32 +70,10 @@ function Sidebar(props) {
         if (currentRoom !== room) dispatch(addNotifications(room));
     });
 
-    // socket.on("typing", (isTyping, user) => {
-    //     setisTyping(isTyping);
-    //     settypingUserId(user._id);
-    // })
- 
-
-  
-
-    // socket.on('myCustomEvent', (data) => {
-    //     console.log(data)
-    //   })
-    const useMediaQuery = (query) => {
-        const [matches, setMatches] = useState(false);
-
-        useEffect(() => {
-            const media = window.matchMedia(query);
-            if (media.matches !== matches) {
-                setMatches(media.matches);
-            }
-            const listener = () => setMatches(media.matches);
-            window.addEventListener("resize", listener);
-            return () => window.removeEventListener("resize", listener);
-        }, [matches, query]);
-
-        return matches;
-    }
+    socket.on("typing", (isTyping, user) => {
+        setisTyping(isTyping);
+        settypingUserId(user._id);
+    })
 
     useEffect(() => {
         if (user) {
@@ -127,9 +84,7 @@ function Sidebar(props) {
         }
     }, []);
 
-    // console.log(members);
-    // console.log(members);
-    socket.off("new-user", ( id)).on("new-user", (payload) => {
+    socket.off("new-user", (id)).on("new-user", (payload) => {
         setMembers(payload);
     });
 
@@ -168,14 +123,7 @@ function Sidebar(props) {
         // }
     }
 
-    const [memberbtn, setmember] = useState(true);
-    const [groupbtn, setGroup] = useState(false);
-    const [profilebtn, setProfile] = useState(false);
-    const [isSelected, setIsSelected] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [ppass, setPpass] = useState("*******");
-    const [image, setImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+
 
     const groupbtnclick = () => {
         setmember(false);
@@ -200,9 +148,6 @@ function Sidebar(props) {
 
     if (!user) {
         return <></>;
-    }
-    const handleBackBtn = () => {
-        settoggleChat(false)
     }
 
     async function postPass(e) {

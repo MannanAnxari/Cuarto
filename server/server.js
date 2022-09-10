@@ -202,7 +202,7 @@ io.on("connection", (socket) => {
   // })
 
   socket.on("typing", async (isTyping, user) => {
-    socket.emit("typing", isTyping, user)
+    socket.broadcast.emit("typing", isTyping, user)
   });
   // var userId = "";
   socket.on("join-room", async (newRoom, previousRoom, id) => {

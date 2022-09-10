@@ -95,20 +95,21 @@ function MessageForm(props) {
 
     //on input change, start the countdown
 
-    $('#msgin').on("input", function () {
-        clearTimeout(typingTimer);
-        setisTyping(true);
-        typingTimer = setTimeout(function () {
-            setisTyping(false);
-        }, doneTypingInterval);
-    });
+    const typed = () => {
+        // clearTimeout(typingTimer);
+        // setisTyping(true);
+        // typingTimer = setTimeout(function () {
+        //     setisTyping(false);
+        // }, doneTypingInterval);
+        socket.emit("typing", isTyping, user)
+    };
 
-    if (isTyping) {
-        socket.emit("typing", isTyping, user)
-    }
-    else {
-        socket.emit("typing", isTyping, user)
-    }
+    // if (isTyping) {
+    //     socket.emit("typing", isTyping, user)
+    // }
+    // else {
+    //     socket.emit("typing", isTyping, user)
+    // }
     // function callServerScript() {
     //     console.log(searchTimeout);
     // }
@@ -286,7 +287,7 @@ function MessageForm(props) {
                             <div className="row g-0">
 
                                 <div className="col">
-                                    <input type="text" id="msgin" autoComplete="off" className="form-control form-control-lg bg-light border-light" placeholder="Enter Message..." disabled={!user} value={message} onChange={(e) => setMessage(e.target.value)}></input>
+                                    <input type="text" id="msgin" onKeyPress={typed} autoComplete="off" className="form-control form-control-lg bg-light border-light" placeholder="Enter Message..." disabled={!user} value={message} onChange={(e) => setMessage(e.target.value)}></input>
                                 </div>
                                 <div className="col-auto">
                                     <div className="chat-input-links ms-md-2 me-md-0">
