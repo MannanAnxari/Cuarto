@@ -1,241 +1,193 @@
-.messages-output {
-    height: 79vh;
-    /* border: 1px solid lightgray; */
-    overflow-y: scroll;
-    /* margin-bottom: 20px; */
+/* New UI  */
+
+.ctext-wrap-content .deleted {
+  font-style: italic;
+  font-size: 80%;
 }
 
-.message-inner {
-    margin-left: 20px;
-    margin-bottom: 10px;
-    padding: 15px;
-    /* text-align: justify; */
-    min-width: 200px;
-    max-width: 65%;
-    text-align: left;
-    min-height: 80px;
-    font: 400 1em, sans-serif;
-    display: inline-block;
-    border-radius: 1rem;
-    border-bottom-right-radius: 0;
-    background: #cacaca;
-    box-shadow: 5px 3px 10px #1f1f1f63;
-    color: #222;
+.deleted-container {
+  opacity: 0.7;
+  padding: 6px 16px !important;
 }
 
-.incoming-message .message-inner {
-    /* background-color: #ffdab9; */
-    /* border-radius: 1rem; */
-    background: #bc333e;
-    border-radius: 1vmax 1vmax 1vmax 0;
-    box-shadow: -5px 3px 10px #dc384650;
-    color: #ffffff;
-    max-width: 65%;
+.chat-leftsidebar {
+  overflow-y: hidden;
 }
 
-.incoming-message {
-    display: flex;
-    justify-content: flex-start;
+.chat-message-list {
+  height: 80vh !important;
 }
 
-.message-timestamp-left {
-    font-size: 0.85em;
-    font-weight: 300;
-    /* margin-top: 10px; */
-
-}
-
-.message-sender {
-    /* margin-bottom: 5px; */
-    font-weight: bold;
-}
-
-.message-date-indicator {
-    width: 150px;
-    margin: 0 auto;
-}
-
-.conversation-info {
-    margin: 0 auto;
-    text-align: center;
-    height: 75px;
-}
-
-.alert.message-date-indicator {
-    border-radius: 2rem !important;
-    padding: 10px !important;
-    background: #212529 !important;
-    color: #ffffff !important;
-    border: none !important;
-}
-
-.alert.alert-danger {
-    border-radius: 0px !important;
-    border: none !important;
-    background: #212529 !important;
-    color: #ffffff !important;
-
-}
-
-.conversation-profile-pic {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    /* margin: 10px auto;
-    margin-bottom: 30px; */
-    border-radius: 50%;
-    margin-left: 10px;
-}
-
-.message {
-    display: flex;
-    justify-content: end;
-    margin-right: 8%;
-}
-
-.message .message-content,
-.message .message-timestamp-left {
-    float: right;
-}
-
-.message .message-content {
-    margin-bottom: 0rem !important;
-    width: 100%;
-    text-align: end;
-}
-
-.message-inner .d-flex.align-items-center.mb-3 {
-    justify-content: end;
-}
-
-.incoming-message .message-content {
-    margin-bottom: 0rem !important;
-    width: 100%;
-    text-align: start;
-
-}
-
-.incoming-message .d-flex.align-items-center.mb-3 {
-    justify-content: start;
-}
-
-.incoming-message .message-timestamp-left {
-    width: 100%;
-    text-align: end;
-}
-
-.message .message-timestamp-left {
-    width: 100%;
-    text-align: end;
-}
-
-.incoming-message img,
-.message img {
-    width: 35px;
-    object-fit: cover;
-    border-radius: 50%;
-    background-color: rgb(236, 236, 236);
-}
-
-.incoming-message {
-    margin-left: 6%;
-}
-
-.message-content {
-    text-align: justify;
-}
-
-.image-cont {
-    display: flex;
-    align-items: center;
-}
-
-
-.container-form.msg-cont {
-    display: flex;
-    width: 95%;
-    background-color: #212529;
-    border-radius: 4rem;
-}
-
-.msg-cont .search__box {
-    padding: 10px 3%;
-    background: none;
-    color: #f7f7f7 !important;
-    border-radius: 2rem;
-    outline: none;
-    border: none;
-    opacity: 1;
-    transition: .3s;
-    box-shadow: none !important;
-}
-
-.msg-cont .search__icon {
-    box-sizing: border-box;
-    float: right;
-    cursor: pointer;
-    color: #ffffff;
-    transition: all .25s ease-in;
-    padding: 0.7rem;
-
-}
-
-.container-form {
-    transition: .3s;
-}
-
-.container-form:focus-within {
-    background-color: #191d20 !important;
-}
-
-.search__box {
-    background-color: transparent !important;
-}
-
-.icobtn {
-    border-radius: 0 2vmax 2vmax 0 !important;
-    box-shadow: none !important;
-}
-
-.conversation-info .back-ico {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    .conversation-info .back-ico {
-        display: flex;
-    }
-
-    .conversation-info {
-        height: 60px !important;
-    }
-
-    .chat-box {
-        height: 94vh !important;
-    }
-
-    .messages-output {
-        height: 85vh !important;
-    }
-}
-
- 
-
- 
-
-
-
-
-  /* New UI  */
-
-  .ctext-wrap-content .deleted{
-    font-style: italic;
-    font-size: 80%;
+@media (max-width: 991.98px) {
+  .chat-message-list {
+    height: 73vh !important;
   }
+}
 
-  .deleted-container{
-    opacity: .7;
-    padding: 6px 16px!important;
+.chat-input-links .list-inline input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.chat-input-links .list-inline .waves-effect.btn {
+  position: relative;
+}
+.emoji-picker-react {
+  position: absolute !important;
+  bottom: 92px !important;
+  right: 2% !important;
+}
+.noMsgMain {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  align-items: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  padding: 15px 20px;
+  background-color: #ededff;
+  width: 360px;
+}
+.noMsgCont {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  align-items: stretch;
+  margin-bottom: 20px;
+}
+.noMsgCol {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  align-items: stretch;
+  height: 40px;
+  width: 40px;
+  transform: rotateZ(0deg);
+}
+.noMsgColm {
+  position: absolute;
+  display: inline;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  user-select: text;
+  cursor: text;
+}
+.noMsgHi {
+  display: inline-block;
+  width: 40px;
+  height: 2280px;
+  background-image: url("https://static-asm.secure.skypeassets.com/pes/v1/emoticons/hi/views/default_40_anim_f?etag=v27");
+  background-size: 40px 2280px;
+  will-change: transform;
+  transform: translate3d(0px, -2280px, 0px);
+  transform-origin: left top;
+  animation: 2.375s steps(57) 0s infinite normal none running
+    SpriteComponentAnimation;
+  backface-visibility: hidden;
+}
+
+.noMsgTxt {
+  position: relative;
+  display: inline;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  font-size: 15px;
+  font-family: "SF Regular", "Segoe System UI Regular", "Segoe UI Regular",
+    sans-serif;
+  font-weight: 400;
+  color: rgb(49, 49, 49);
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  cursor: inherit;
+}
+.noMsgTxtB {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  align-items: stretch;
+  justify-content: center;
+  app-region: no-drag;
+  background-color: transparent;
+  border-color: transparent;
+  text-align: left;
+  border-width: 0px;
+  min-width: 150px;
+  margin-top: 20px;
+  margin-left: 50px;
+  margin-right: 50px;
+  padding: 0px;
+  cursor: pointer;
+  border-style: solid;
+}
+
+.noMsgTxtC {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 20px;
+  padding-left: 25px;
+  padding-right: 25px; 
+  opacity: 1;
+  transform: scale(1) translateX(0px) translateY(0px);
+  transition: none 0s ease 0s;
+}
+
+.noMsgTxtD {
+  position: relative;
+  display: inline;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  font-family: "SF Bold", "Segoe System UI Bold", "Segoe UI Bold", sans-serif;
+  font-weight: 400;
+  color: rgb(255, 255, 255);
+  cursor: inherit;
+}
+.noMsgArea {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+@keyframes SpriteComponentAnimation {
+  0% {
+    transform: translateZ(0);
   }
-
-  
+}
+.bodySpritePauser .SpriteComponentAnimationPause {
+  animation-play-state: paused !important;
+}

@@ -1,32 +1,39 @@
-import React, { useContext, useState } from "react"; 
+import React, { useContext, useState } from "react";
 import { useLoginUserMutation } from "../services/appApi";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { AppContext } from "../context/appContext";
 
-function Login() {
+function Login({ showAlert }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const { socket } = useContext(AppContext);
-    const [loginUser, { isLoading, error }] = useLoginUserMutation();
+    const [loginUser, { error }] = useLoginUserMutation();
     function handleLogin(e) {
         e.preventDefault();
         // login logic
         loginUser({ email, password }).then(({ data }) => {
             if (data) {
                 // socket work
+                toast.success("Successfully Logged in")
                 socket.emit("new-user");
                 // navigate to the chat
                 navigate("/chat");
+            }
+            else {
+                toast.error(error.data)
             }
         });
     }
 
     return (
 
-        <div className="account-pages my-5 pt-sm-5">
-            {error && <div className="alert alert-warning alert-dismissible fade show" role="alert"><strong>Warning!  </strong>{error.data}<button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>}
+        <div className="account-pages my-5">
+            {/* {error && <div className="alert alert-warning alert-dismissible fade show" role="alert"><strong>Warning!  </strong>{error.data}<button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>} */}
+            {/* {error && toast.success(error.data)} */}
+
 
             <div className="container">
                 <div className="row justify-content-center">
@@ -35,9 +42,9 @@ function Login() {
                             <a href="index.html" className="auth-logo mb-5 d-block">
                                 <img src="assets/images/logo-dark.png" alt="" height="30" className="logo logo-dark" />
                                 <img src="assets/images/logo-light.png" alt="" height="30" className="logo logo-light" />
-                            </a> 
+                            </a>
                             <h4>Sign in</h4>
-                            <p className="text-muted mb-4">Sign in to continue to Chatvia.</p>
+                            <p className="text-muted mb-4">Sign in to continue to Cuarto.</p>
 
                         </div>
 

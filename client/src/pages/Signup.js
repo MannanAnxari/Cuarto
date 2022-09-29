@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSignupUserMutation } from "../services/appApi";
 import { Link, useNavigate } from "react-router-dom";
 import "./Signup.css";
+import toast from "react-hot-toast";
 import botImg from "../assets/bot.jpeg";
 
 function Signup() {
@@ -18,7 +19,7 @@ function Signup() {
     function validateImg(e) {
         const file = e.target.files[0];
         if (file.size >= 1048576) {
-            return alert("Max file size is 1mb");
+            toast.error("Max File Size is 1MB");
         } else {
             setImage(file);
             setImagePreview(URL.createObjectURL(file));
@@ -54,57 +55,20 @@ function Signup() {
         signupUser({ name, email, password, picture: url }).then(({ data }) => {
             if (data) {
                 // console.log(data);
+                toast.success("Successfully Registered")
                 navigate("/chat");
+            }
+            else {
+                toast.error(error.data)
             }
         });
     }
+    
 
     return (
         <div>
 
-            {error && <div className="alert alert-warning alert-dismissible fade show" role="alert"><strong>Warning!  </strong>{error.data}<button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>}
-
-            {/* <div className="container ">
-                <div className="wrapper" >
-
-                    <div className="logo">
-                        <div className="signup-profile-pic__container">
-                            <img src={imagePreview || botImg} alt="Profile Pic" className="signup-profile-pic" />
-                            <label htmlFor="image-upload" className="image-upload-label">
-                                <i className="fas fa-plus-circle add-picture-icon"></i>
-                            </label>
-                            <input type="file" id="image-upload" hidden accept="image/png, image/jpeg" onChange={validateImg} />
-                        </div>
-                    </div>
-                    <div className="text-center mt-4 name text-white">
-                        Oscuro Room
-                    </div>
-                    <form className="p-3 pt-5" onSubmit={handleSignup}>
-                        <div className="form-field d-flex align-items-center" controlId="formBasicName">
-                            <span className="text-light opacity-50 fa fa-user"></span>
-                            <input type="text" name="name" id="join" onChange={(e) => setName(e.target.value)} value={name} placeholder="Your Name" required />
-                        </div>
-                        <div className="form-field d-flex align-items-center">
-                            <span className="text-light opacity-50 fa fa-user"></span>
-                            <input type="email" name="email" id="join" onChange={(e) => setEmail(e.target.value)} value={email} placeholder="Email" required />
-                        </div>
-                        <div className="form-field d-flex align-items-center">
-                            <span className="text-light opacity-50 fa fa-key"></span>
-                            <input type="password" name="password" id="join" onChange={(e) => setPassword(e.target.value)} value={password} placeholder="password" required />
-                        </div>
-                        <div className="btn-primary shadow-none border-0" type="submit">
-                            {upladingImg || isLoading ? "Signing you up..." : "Signup"}
-                        </div>
-                        <div className="py-4">
-                            <p className="text-center">
-                                Already have an account ? <Link to="/login">Login</Link>
-                            </p>
-                        </div>
-                    </form>
-                </div>
-            </div> */}
-
-            <div className="account-pages my-5 pt-sm-5">
+            <div className="account-pages my-5">
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-md-8 col-lg-6 col-xl-5">
@@ -125,11 +89,11 @@ function Signup() {
                                         <form onSubmit={handleSignup}>
 
                                             <div className="mb-3">
-                                                <img src={imagePreview || botImg} alt="Profile Pic" className="signup-profile-pic w-25" />
-                                                <label className="form-label">Profile Picture</label>
-                                                <div className="input-group bg-soft-light rounded-3  mb-3">
-                                                    <span className="input-group-text text-muted" id="basic-addon5">
-                                                        <i className="ri-image-line"></i>
+                                                <div className="input-group bg-soft-light rounded-3 overflow-hidden mb-3">
+                                                    <span className="input-group-text text-muted p-0 choseProfile" id="basic-addon5">
+                                                        {/* <i className="ri-image-line"></i> */}
+                                                        <img src={imagePreview || botImg} alt="Profile Pic" className="w-100" />
+
                                                     </span>
                                                     <input type="file" accept="image/png, image/jpeg" className="form-control form-control-lg bg-soft-light border-light" id="image-upload" aria-label="Enter Email" aria-describedby="basic-addon5" onChange={validateImg} />
 
@@ -177,7 +141,7 @@ function Signup() {
                                             </div>
 
                                             <div className="mt-4 text-center">
-                                                <p className="text-muted mb-0">By registering you agree to the Cuarto <a href="#" className="text-primary">Terms of Use</a></p>
+                                                <p className="text-muted mb-0">By registering you agree to the Cuarto <a href="/#" className="text-primary">Terms of Use</a></p>
                                             </div>
 
                                         </form>

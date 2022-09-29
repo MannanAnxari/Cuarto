@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "bootstrap": "^5.2.0"
+    "bootstrap": "^5.2.0",
+    "emoji-picker-react": "^4.0.3"
   }
 }
