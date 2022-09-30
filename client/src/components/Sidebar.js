@@ -18,9 +18,8 @@ function Sidebar(props) {
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const [logoutUser] = useLogoutUserMutation();
-    const { socket, setMembers, members, setCurrentRoom,  setAllGroups, allgroups,  setRooms, privateMemberMsg, rooms, setPrivateMemberMsg, currentRoom, messages } = useContext(AppContext);
+    const { socket, setMembers, members, setCurrentRoom, setAllGroups, allgroups, setRooms, privateMemberMsg, rooms, setPrivateMemberMsg, currentRoom, messages } = useContext(AppContext);
     const [activePhoneChatBox, setactivePhoneChatBox] = useState(false);
-    const [sendScreenStatus, setsendScreenStatus] = useState(false);
     const [groupbtn, setGroup] = useState(false);
     const [chatbtn, setChat] = useState(true);
     const [memberbtn, setmember] = useState(false);
@@ -43,16 +42,7 @@ function Sidebar(props) {
     }
 
 
-    function joinRoom(room, isPublic = true, id,pass) { 
-        socket.emit("join-room", room, currentRoom, id);
-        setCurrentRoom(room);
-        setactivePhoneChatBox(true)
-        if (isPublic) {
-            setPrivateMemberMsg(null);
-        }
-        dispatch(resetNotifications(room));
 
-    }
     const setTheme = () => {
         if (document.body.getAttribute("data-layout-mode") === "dark") {
             document.body.setAttribute("data-layout-mode", "light");
@@ -67,9 +57,7 @@ function Sidebar(props) {
     async function handleLogout(e) {
         e.preventDefault();
         await logoutUser(user); 
-        // window.location.replace("/");
     }
-
 
 
     const changeActive = () => {
@@ -82,26 +70,10 @@ function Sidebar(props) {
     });
 
 
-
-
-
     var id = user._id;
     socket.off("new-user", (id)).on("new-user", (payload) => {
         setMembers(payload);
     }); 
-
-    // socket.off("new-group").on("new-group", (payload) => {
-    //     setAllGroups(payload);
-    // });
-    // function getRooms() {
-        // fetch("https://cuarta.herokuapp.com/rooms")
-    //     fetch("http://localhost:8000/rooms")
-    //         .then((res) => res.json())
-    //         .then((data) => setRooms(data));
-    // }
-
-
-
 
 
     const groupbtnclick = () => {
@@ -230,18 +202,18 @@ function Sidebar(props) {
 
                             <div>
                                 {groupbtn &&
-                                    <GroupSidebar joinRoom={joinRoom} rooms={rooms} currentRoom={currentRoom} user={user} />
+                                    <GroupSidebar />
                                 }
 
                                 {chatbtn &&
-                                    <PrivateUserSidear user={user} joinRoom={joinRoom} members={members} privateMemberMsg={privateMemberMsg} messages={messages} setPrivateMemberMsg={setPrivateMemberMsg} socket={socket} setactivePhoneChatBox={setactivePhoneChatBox} setsendScreenStatus={setsendScreenStatus} />
+                                    <PrivateUserSidear />
                                 }
                                 {memberbtn &&
-                                    <PrivateUserSidear user={user} joinRoom={joinRoom} members={members} privateMemberMsg={privateMemberMsg} messages={messages} setPrivateMemberMsg={setPrivateMemberMsg} socket={socket} setactivePhoneChatBox={setactivePhoneChatBox} setsendScreenStatus={setsendScreenStatus} />
+                                    <PrivateUserSidear />
                                 }
 
                                 {profilebtn &&
-                                    <Profile showAlert={props.showAlert} user={user} />
+                                    <Profile />
                                 }
                             </div>
                         </div>
@@ -250,7 +222,7 @@ function Sidebar(props) {
                 </div>
 
                 <div className={`user-chat w-100 ${activePhoneChatBox ? "user-chat-show" : ""} overflow-hidden`}>
-                    <MessageForm showAlert={props.showAlert} sendScreenStatus={sendScreenStatus} />
+                    <MessageForm showAlert={props.showAlert} />
                     <div className="d-block d-lg-none me-2 ms-0 back-phone-chat-btn" onClick={changeActive}>
                         <a className="user-chat-remove text-muted font-size-16 p-2"><i className="ri-arrow-left-s-line"></i></a>
                     </div>

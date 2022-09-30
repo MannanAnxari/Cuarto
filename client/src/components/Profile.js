@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { useUpdateUserNameMutation, useUpdateUserPasswordMutation, useUpdateUserProfileImageMutation } from '../services/appApi';
 
 
-const Profile = ({ showAlert, user }) => { 
+const Profile = () => {
+  const user = useSelector((state) => state.user);
   const [pname, setPname] = useState(user.name);
   const [ppass, setPpass] = useState("*******");
   const [isSelected, setIsSelected] = useState(false);
@@ -9,15 +13,16 @@ const Profile = ({ showAlert, user }) => {
   const [image, setImage] = useState(null);
   const [isActiveEdit, setActiveEdit] = useState("false");
   const [isActiveEditPass, setisActiveEditPass] = useState("false");
-  
+  const [updateUserName] = useUpdateUserNameMutation();
+  const [updateUserPassword] = useUpdateUserPasswordMutation();
+  const [updateUserProfileImage] = useUpdateUserProfileImageMutation();
+
 
   let userId = user._id;
   function validateImg(e) {
     const file = e.target.files[0];
     if (file.size >= 1048576) {
-      // return alert("Max file size is 1mb"); 
-      showAlert("Max File Size is 1MB", "error")
-      // console.log("Max sized");
+      toast.error("Max File Size is 1MB");
     } else {
       setIsSelected(true);
       setImage(file);
@@ -32,84 +37,55 @@ const Profile = ({ showAlert, user }) => {
   const enableEdit = () => {
     setActiveEdit(!isActiveEdit);
   };
-  async function handelUpdateProPic(e) {
-    // console.log("Upload");
+
+  const handleUpdateProPic = async (e) => {
     e.preventDefault();
-    if (!image) showAlert("Please upload your profile picture", "error");
+    if (!image) toast.error("Please upload your profile picture");
     const img = await uploadImage(image);
-    // signup the user
-    e.preventDefault();
-    const response = await fetch("http://localhost:8000/update_profile_picture", {
-      // const response = await fetch("https://cuarta.herokuapp.com/update_profile_picture", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        img,
-        userId,
-      }),
-    });
 
-    let data = await response.json();
-    if (response.ok) {
-      // console.log("Profile Success");
-      return showAlert(data.msg, "success");
-    } else {
-      // console.log("Profile Error");
-      return showAlert(data.error, "error");
-    }
+    // update profile image
+    updateUserProfileImage({ img, userId }).then(({ data }) => {
+      if (data) {
+        toast.success(data.msg)
+      }
+      else {
+        console.log(data);
+        toast.error(data.error);
+      }
+    });
   }
 
-  async function postPass(e) {
+  const handleUpdatePassword = (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8000/update_password", {
-      // const response = await fetch("https://cuarta.herokuapp.com/update_password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId,
-        ppass,
-      }),
+    // update password
+    updateUserPassword({ userId, ppass }).then(({ data }) => {
+      if (data) {
+        toast.success(data.msg)
+      }
+      else {
+        toast.error(data.error);
+      }
     });
-    let data = await response.json();
-    if (response.ok) {
-      return showAlert(data.msg, "success");
-    } else {
-      return showAlert(data.error, "warning");
-    }
   }
-
   var pImage = user.picture;
 
-  async function postName(e) {
+  const handleUpdateUsername = (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8000/update_name", {
-      // const response = await fetch("https://cuarta.herokuapp.com/update_name", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId,
-        pname,
-      }),
+    // update username
+    updateUserName({ userId, pname }).then(({ data }) => {
+      if (data) {
+        toast.success(data.msg)
+      }
+      else {
+        toast.error(data.error);
+      }
     });
-    let data = await response.json();
-    if (response.ok) {
-      return showAlert(data.msg, "success");
-    } else {
-      return showAlert(data.error, "error");
-    }
   }
-  async function uploadImage() {
+  const uploadImage = async () => {
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "crl4gmtt");
     try {
-
       let res = await fetch("https://api.cloudinary.com/v1_1/dmfeom3v4/image/upload", {
         method: "post",
         body: data,
@@ -117,7 +93,7 @@ const Profile = ({ showAlert, user }) => {
       const urlData = await res.json();
       return urlData.url;
     } catch (error) {
-      console.log(error + "Image Not Upload Sucessfully!");
+      toast.error(error + " Image Not Upload Sucessfully!");
     }
   }
   return (
@@ -128,7 +104,7 @@ const Profile = ({ showAlert, user }) => {
         </div>
 
         <div className="text-center border-bottom p-4">
-          <form onSubmit={handelUpdateProPic} >
+          <form onSubmit={handleUpdateProPic} >
             <div className="mb-4 profile-user">
               <img src={imagePreview || pImage} className="rounded-circle avatar-lg img-thumbnail" alt="" />
               <div className="uploadBtn position-relative">
@@ -168,7 +144,7 @@ const Profile = ({ showAlert, user }) => {
               </div>
               <div id="personalinfo" className="accordion-collapse collapse" aria-labelledby="personalinfo1" data-bs-parent="#settingprofile" >
                 <div className="accordion-body">
-                  <form onSubmit={postName}>
+                  <form onSubmit={handleUpdateUsername}>
                     <div>
                       <p className="text-muted mb-1">Name</p>
                       <input
@@ -185,7 +161,7 @@ const Profile = ({ showAlert, user }) => {
                   </form>
 
                   <div className="mt-4">
-                    <form onSubmit={postPass}>
+                    <form onSubmit={handleUpdatePassword}>
                       <div>
                         <p className="text-muted mb-1">Password</p>
                         <input

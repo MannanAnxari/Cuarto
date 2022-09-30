@@ -5,8 +5,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const appApi = createApi({
     reducerPath: "appApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://localhost:8000/",
-        // baseUrl: "https://cuarta.herokuapp.com/",
+        // baseUrl: "http://localhost:8000/",
+        baseUrl: "https://cuarta.herokuapp.com/",
     }),
 
     endpoints: (builder) => ({
@@ -37,9 +37,72 @@ const appApi = createApi({
                 body: payload,
             }),
         }),
+
+        // delete user message
+
+        deleteUserMsg: builder.mutation({
+            query: (payload) => ({
+                url: "/data/delete_user_message",
+                method: "POST",
+                body: payload,
+            }),
+        }),
+
+        // update username
+
+        updateUserName: builder.mutation({
+            query: (payload) => ({
+                url: "/data/update_name",
+                method: "POST",
+                body: payload,
+            }),
+        }),
+
+        // update user password
+
+        updateUserPassword: builder.mutation({
+            query: (payload) => ({
+                url: "/data/update_password",
+                method: "POST",
+                body: payload,
+            }),
+        }),
+
+        // update user profile image
+
+        updateUserProfileImage: builder.mutation({
+            query: (payload) => ({
+                url: "/data/update_profile_picture",
+                method: "POST",
+                body: payload,
+            }),
+        }),
+
+        // fetch all groups
+
+        fetchAllGroups: builder.mutation({
+            query: (payload) => ({
+                url: "/data/fetchallgroups",
+                method: "POST",
+                body: payload,
+            }),
+        }),
+
+        // create a new group
+
+        createNewGroup: builder.mutation({
+            query: (payload) => ({
+                url: "/data/creategroup",
+                method: "POST",
+                body: payload,
+            }),
+        }),
+
+
+
     }),
 });
 
-export const { useSignupUserMutation, useLoginUserMutation, useLogoutUserMutation } = appApi;
+export const { useSignupUserMutation, useLoginUserMutation, useLogoutUserMutation, useDeleteUserMsgMutation, useUpdateUserNameMutation, useUpdateUserPasswordMutation, useUpdateUserProfileImageMutation, useCreateNewGroupMutation, useFetchAllGroupsMutation } = appApi;
 
 export default appApi;

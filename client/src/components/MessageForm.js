@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { AppContext } from "../context/appContext";
+import { useDeleteUserMsgMutation } from "../services/appApi";
 import "./MessageForm.css";
 import Alert from "./Alert";
 import Picker from "emoji-picker-react";
@@ -9,19 +10,35 @@ import Picker from "emoji-picker-react";
 import FileBase64 from "react-file-base64";
 
 function MessageForm(props) {
-  const [isTyping, setisTyping] = useState(false);
   const user = useSelector((state) => state.user);
   const [content, setContent] = useState({ msg: "", img: "" });
+  const [deleteUserMsg] = useDeleteUserMsgMutation();
+
   const {
     socket,
     currentRoom,
     setMessages,
     messages,
+    sendScreenStatus,
     allgroups,
     privateMemberMsg,
   } = useContext(AppContext);
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
+
+  const handleMsgDelete = (id, currentRoom) => {
+    // delete user message
+    deleteUserMsg({ id, currentRoom, }).then(({ data }) => {
+      if (data) {
+        toast.success("Successfully Deleted");
+        socket.emit("reload-deleted", currentRoom);
+        setMessages(data.msgList);
+      }
+      else {
+        toast.error(data.error);
+      }
+    });
+  }
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
@@ -46,7 +63,7 @@ function MessageForm(props) {
     return day + "/" + month + "/" + year;
   }
 
-  function scrollToBottom() {
+  const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }
   const todayDate = getFormattedDate();
@@ -60,11 +77,10 @@ function MessageForm(props) {
     const minutes =
       today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
     const time = today.getHours() + ":" + minutes;
-    const roomId = currentRoom;
     const classname = "";
     socket.emit(
       "message-room",
-      roomId,
+      currentRoom,
       "hi",
       content.img,
       classname,
@@ -94,32 +110,6 @@ function MessageForm(props) {
     );
     setContent({ msg: "", img: "" });
   }
-  async function sendMsgId(id, currentRoom) {
-    const response = await fetch("http://localhost:8000/delete_user_message", {
-      // const response = await fetch("https://cuarta.herokuapp.com/delete_user_message", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id,
-        currentRoom,
-      }),
-    });
-    let data = await response.json();
-    if (response.ok) {
-      toast.success("Successfully Deleted");
-
-      socket.emit("reload-deleted", currentRoom);
-      // setIsDeleted(true);
-      // setIsDeleted(current => [...current, id]);
-      setMessages(data.msgList);
-      // return props.showAlert(data.msg, "warning");
-    } else {
-      return props.showAlert(data.error, "error");
-    }
-  }
-
   //on input change, start the countdown
 
   const typed = () => {
@@ -235,7 +225,7 @@ function MessageForm(props) {
                         <a href="#" className="text-reset user-profile-show">
                           {privateMemberMsg.name}
                         </a>{" "}
-                        {props.sendScreenStatus ? (
+                        {sendScreenStatus ? (
                           <i className="ri-record-circle-fill font-size-10 text-success d-inline-block ms-1"></i>
                         ) : (
                           <i className="ri-record-circle-fill font-size-10 text-muted d-inline-block ms-1"></i>
@@ -516,7 +506,7 @@ function MessageForm(props) {
                                                   className="dropdown-item"
                                                   href="#"
                                                   onClick={() =>
-                                                    sendMsgId(_id, currentRoom)
+                                                    handleMsgDelete(_id, currentRoom)
                                                   }
                                                 >
                                                   Delete{" "}

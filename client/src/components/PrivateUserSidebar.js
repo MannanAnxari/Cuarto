@@ -1,7 +1,13 @@
-import React, { useState } from 'react'
+import { AppContext } from "../context/appContext";
+import React, { useState, useContext } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 
 
-export const PrivateUserSidear = ({ joinRoom, setactivePhoneChatBox, setsendScreenStatus, members, privateMemberMsg, setPrivateMemberMsg, socket, user, messages }) => {
+
+export const PrivateUserSidear = () => {
+    const user = useSelector((state) => state.user);
+
+    const { socket, members, privateMemberMsg, setPrivateMemberMsg, joinRoom, setsendScreenStatus, setactivePhoneChatBox, sendScreenStatus } = useContext(AppContext);
 
     const [typingUserId, settypingUserId] = useState(null);
     const [whereUserTyping, setwhereUserTyping] = useState(null);
@@ -16,6 +22,7 @@ export const PrivateUserSidear = ({ joinRoom, setactivePhoneChatBox, setsendScre
     // console.log(`${user._id} | ${whereUserTyping}`);
 
     function handlePrivateMemberMsg(member) {
+        // console.log(member);
         // settoggleChat(true)
 
         setPrivateMemberMsg(member);
@@ -32,7 +39,7 @@ export const PrivateUserSidear = ({ joinRoom, setactivePhoneChatBox, setsendScre
         // console.log("You Select Kodrz");
         // }
         // else {
-        joinRoom(roomId, false, user._id);
+        joinRoom(roomId, false, user._id, "");
         // }
     }
     function orderIds(id1, id2) {
@@ -50,7 +57,7 @@ export const PrivateUserSidear = ({ joinRoom, setactivePhoneChatBox, setsendScre
     const lastmsgs = (mess, mmbr) => {
         mess.map((item) => {
             // console.log(item.messagesByDate[item.messagesByDate.length-1].content);
-            item.messagesByDate.map(({ from: sender ,content}) => {
+            item.messagesByDate.map(({ from: sender, content }) => {
                 // console.log(sender._id);
                 mmbr.map((itemx) => {
                     // console.log(itemx._id);
@@ -61,7 +68,7 @@ export const PrivateUserSidear = ({ joinRoom, setactivePhoneChatBox, setsendScre
             })
         })
     }
-    lastmsgs(messages, members)
+    // lastmsgs(messages, members)
 
     return (
 
@@ -178,17 +185,17 @@ export const PrivateUserSidear = ({ joinRoom, setactivePhoneChatBox, setsendScre
                                                 // return <p className="chat-user-message text-truncate mb-0">{item.messagesByDate[item.messagesByDate.length - 1].content}</p>;
 
                                                 // messages.map((item) => {
-                                                    // console.log(item.messagesByDate[item.messagesByDate.length-1].content);
-                                                    // item.messagesByDate.map(({ from: sender }, content) => {
-                                                        // console.log(sender._id);
-                                                        // members.map((itemx) => {
-                                                            // console.log(itemx._id);
-                                                            // if (sender._id === itemx._id) {
-                                                            //     console.log("True");
-                                                            // }
-                                                        //    return <p className="chat-user-message text-truncate mb-0">{item.messagesByDate[item.messagesByDate.length-1].content}</p>
-                                                        // })
-                                                    // })
+                                                // console.log(item.messagesByDate[item.messagesByDate.length-1].content);
+                                                // item.messagesByDate.map(({ from: sender }, content) => {
+                                                // console.log(sender._id);
+                                                // members.map((itemx) => {
+                                                // console.log(itemx._id);
+                                                // if (sender._id === itemx._id) {
+                                                //     console.log("True");
+                                                // }
+                                                //    return <p className="chat-user-message text-truncate mb-0">{item.messagesByDate[item.messagesByDate.length-1].content}</p>
+                                                // })
+                                                // })
                                                 // })
                                                 // return item.messagesByDate[item.messagesByDate.length-1].content; 
                                                 // })

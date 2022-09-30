@@ -5,8 +5,7 @@ const CreateGroup = ({
   setgroupName,
   groupPass,
   setgroupPass,
-  createGroup,
-  user
+  createGroup 
 }) => {
  
   return (

@@ -2,47 +2,50 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import { AppContext } from "../context/appContext";
 import toast from "react-hot-toast";
 import CreateGroup from "./CreateGroup";
+import { useSelector } from "react-redux";
+import { useCreateNewGroupMutation } from "../services/appApi";
 import JoinByPass from "./JoinByPass";
 
-export const GroupSidebar = ({ joinRoom, rooms, currentRoom, user }) => {
-  const { setAllGroups, allgroups } = useContext(AppContext);
+export const GroupSidebar = () => {
+  const user = useSelector((state) => state.user);
+  const { setAllGroups, allgroups, joinRoom, currentRoom } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [groupName, setgroupName] = useState("");
+  const [groupPass, setgroupPass] = useState("");
   const [gpPassword, setgpPassword] = useState({
     byUser: "",
     byGroup: "",
     groupName: "",
     userid: "",
   });
-  const [groupPass, setgroupPass] = useState("");
+  const [createNewGroup] = useCreateNewGroupMutation();
   const myRefname = useRef(null);
   const myRefclose = useRef(null);
   const handleClick = () => {
     myRefname.current.click();
   };
 
-  var groupCreator = user.id
-
-  async function createGroup() {
-    const response = await fetch("http://localhost:8000/creategroup", { 
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        groupName,
-        groupPass,
-        groupCreator,
-      }),
-    }); 
-    let data = await response.json();
-    if (response.ok) {
-      toast.success(data.msg); 
-      setAllGroups(data.allgroup);
-    } else {
-      toast.error(data);
-    }
+  const createGroup = () => {
+    // create a new group
+    createNewGroup({ groupName, groupPass, groupCreator: user._id, }).then(({ data }) => {
+      if (data) {
+        toast.success(data.msg);
+        setAllGroups(data.allgroup);
+        setgpPassword({
+          byUser: "",
+          byGroup: "",
+          groupName: "",
+          userid: "",
+          grppss: "",
+        });
+      }
+      else {
+        // console.log(data);
+        toast.error("Internal Server Error");
+      }
+    });
   }
+
   const checkPassAndJoin = (groupPassword) => {
     let { byUser, byGroup, groupName, userid } = groupPassword;
     if (byUser === byGroup) {
@@ -61,8 +64,7 @@ export const GroupSidebar = ({ joinRoom, rooms, currentRoom, user }) => {
     }
   };
   const joinRoomByCrd = (grpname, groupvisib, userid, grppass) => {
-    joinRoom(grpname, groupvisib, userid, grppass);
-    // console.log(grpname, groupvisib, userid, grppass);
+    joinRoom(grpname, groupvisib, userid, grppass); 
   };
 
   return (
@@ -86,8 +88,7 @@ export const GroupSidebar = ({ joinRoom, rooms, currentRoom, user }) => {
               setgroupName={setgroupName}
               groupPass={groupPass}
               setgroupPass={setgroupPass}
-              createGroup={createGroup}
-              user={user}
+              createGroup={createGroup} 
             />
             <div className="search-box chat-search-box">
               <div className="input-group rounded-3">
